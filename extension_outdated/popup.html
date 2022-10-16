@@ -1,0 +1,349 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="popup.css" rel="stylesheet" type="text/css" />
+<script type="module" src="popup.js"></script>
+<!-- CSS only -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+<!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+<style>
+  </style>
+
+
+<!--
+<div class="container">
+  <div>
+    <div class="title">Please visit amazon/flipkart for this to work</div>
+    <h1 class="productName"></h1>
+
+    <div class="bookmarks" id="bookmarks"></div>
+  </div>
+</div>
+<div class="container">
+    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+      <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
+        <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg>
+        <h1>Sellist product research</h1>
+      </a>
+
+      <ul class="nav nav-pills">
+        <li class="nav-item"><a href="#" class="nav-link active" aria-current="page">Home</a></li>
+        <li class="nav-item"><a href="#" class="nav-link">Features</a></li>
+        <li class="nav-item"><a href="#" class="nav-link">Pricing</a></li>
+        <li class="nav-item"><a href="#" class="nav-link">FAQs</a></li>
+        <li class="nav-item"><a href="#" class="nav-link">About</a></li>
+      </ul>
+    </header>
+  </div> -->
+
+<!--<nav class="navbar navbar-expand-sm fixed-top bg-dark">
+  <div class="container-fluid">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link active" href="#">Active</a>
+      </li>
+     <li class="nav-item">
+        <a class="nav-link" href="#">Link</a>
+      </li>
+    </ul>
+    <form class="d-flex">
+      <input class="form-control me-2" type="text" placeholder="Search">
+      <button class="btn btn-primary" type="button">Search</button>
+    </form>
+  </div>
+</nav>-->
+
+<div class="container-fluid p-5">
+  <div class="row">
+    <div class="col-8">
+      <img id="top-logo" src="assets/logo-with-text.png" />
+    </div>
+  </div>
+  <h1>eComm Research Tool</h1>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <div id="select-feature" class="row">
+      <h4 id="parent-id" class="card-title">Something</h4>
+      <div class="row">
+        <div class="col">
+          <div class="card">
+            <div class="card-title"><button onclick="getProductDetails()">Get product Details</button></div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card">
+            <div class="card-title"><button onclick="analyzeReviews()">Analyze Reviews</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="invalid-site" class="card">
+      <div class="card-body">
+        <div class="card-title">
+          Browse ecommerce websites to use the extension
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="amazon-product-details" class="card">
+  <div class="card-body">
+    <table class="table" id="amazon-table">
+      <thead>
+        <tr>
+          <th>Attribute</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Product Name</td>
+          <td id="amazon-research-product-name"></td>
+        </tr>
+        <tr>
+          <td>ASIN</td>
+          <td id="amazon-research-asin"></td>
+        </tr>
+        <tr>
+          <td>Brand</td>
+          <td id="amazon-research-brand"></td>
+        </tr>
+        <tr>
+          <td>Price</td>
+          <td id="amazon-research-price"></td>
+        </tr>
+        <tr>
+          <td>Sales(beta)</td>
+          <td id="amazon-research-sales"></td>
+        </tr>
+        <tr>
+          <td>Sales Graph(beta)</td>
+          <td id="amazon-research-sales-graph"></td>
+        </tr>
+        <tr>
+          <td>Manufacturer</td>
+          <td id="amazon-research-manufacturer"></td>
+        </tr>
+        <tr>
+          <td>Revenue(beta)</td>
+          <td id="amazon-research-revenue"></td>
+        </tr>
+        <tr>
+          <td>BSR(beta)</td>
+          <td id="amazon-research-bsr"></td>
+        </tr>
+        <tr>
+          <td>Seller Country/Region(beta)</td>
+          <td id="amazon-research-seller-country"></td>
+        </tr>
+        <tr>
+          <td>FBA Fees</td>
+          <td id="amazon-research-fba-fees"></td>
+        </tr>
+        <tr>
+          <td>Active Sellers #</td>
+          <td id="amazon-research-active-sellers"></td>
+        </tr>
+        <tr>
+          <td>Ratings</td>
+          <td id="amazon-research-ratings"></td>
+        </tr>
+        <tr>
+          <td>Review Count</td>
+          <td id="amazon-research-review-count"></td>
+        </tr>
+        <tr>
+          <td>Images</td>
+          <td id="amazon-research-images"></td>
+        </tr>
+        <tr>
+          <td>Review Velocity</td>
+          <td id="amazon-research-review-velocity"></td>
+        </tr>
+        <tr>
+          <td>Buy box</td>
+          <td id="amazon-research-buy-box"></td>
+        </tr>
+        <tr>
+          <td>Category</td>
+          <td id="amazon-research-category"></td>
+        </tr>
+        <tr>
+          <td>Size Tier</td>
+          <td id="amazon-research-size-tier"></td>
+        </tr>
+        <tr>
+          <td>Fulfilment</td>
+          <td id="amazon-research-fulfilment"></td>
+        </tr>
+        <tr>
+          <td>Dimensions</td>
+          <td id="amazon-research-dimensions"></td>
+        </tr>
+        <tr>
+          <td>Weight</td>
+          <td id="amazon-research-weight"></td>
+        </tr>
+        <tr>
+          <td>Creation Date</td>
+          <td id="amazon-research-creation-date"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div id="flipkart-product-details" class="card">
+  <div class="card-body">
+    <table class="table" id="flipkart-table">
+      <thead>
+        <tr>
+          <th>Attribute</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Product Name</td>
+          <td id="flipkart-research-product-name"></td>
+        </tr>
+        <tr>
+          <td>ASIN</td>
+          <td id="flipkart-research-asin"></td>
+        </tr>
+        <tr>
+          <td>Brand</td>
+          <td id="flipkart-research-brand"></td>
+        </tr>
+        <tr>
+          <td>Price</td>
+          <td id="flipkart-research-price"></td>
+        </tr>
+        <tr>
+          <td>Sales(beta)</td>
+          <td id="flipkart-research-sales"></td>
+        </tr>
+        <tr>
+          <td>Sales Graph(beta)</td>
+          <td id="flipkart-research-sales-graph"></td>
+        </tr>
+        <tr>
+          <td>Revenue(beta)</td>
+          <td id="flipkart-research-revenue"></td>
+        </tr>
+        <tr>
+          <td>BSR(beta)</td>
+          <td id="flipkart-research-bsr"></td>
+        </tr>
+        <tr>
+          <td>Seller Country/Region(beta)</td>
+          <td id="flipkart-research-seller-country"></td>
+        </tr>
+        <tr>
+          <td>FBA Fees</td>
+          <td id="flipkart-research-fba-fees"></td>
+        </tr>
+        <tr>
+          <td>Active Sellers #</td>
+          <td id="flipkart-research-active-sellers"></td>
+        </tr>
+        <tr>
+          <td>Ratings</td>
+          <td id="flipkart-research-ratings"></td>
+        </tr>
+        <tr>
+          <td>Review Count</td>
+          <td id="flipkart-research-review-count"></td>
+        </tr>
+        <tr>
+          <td>Images</td>
+          <td id="flipkart-research-images"></td>
+        </tr>
+        <tr>
+          <td>Review Velocity</td>
+          <td id="flipkart-research-review-velocity"></td>
+        </tr>
+        <tr>
+          <td>Buy box</td>
+          <td id="flipkart-research-buy-box"></td>
+        </tr>
+        <tr>
+          <td>Category</td>
+          <td id="flipkart-research-category"></td>
+        </tr>
+        <tr>
+          <td>Size Tier</td>
+          <td id="flipkart-research-size-tier"></td>
+        </tr>
+        <tr>
+          <td>Fulfilment</td>
+          <td id="flipkart-research-fulfilment"></td>
+        </tr>
+        <tr>
+          <td>Dimensions</td>
+          <td id="flipkart-research-dimensions"></td>
+        </tr>
+        <tr>
+          <td>Weight</td>
+          <td id="flipkart-research-weight"></td>
+        </tr>
+        <tr>
+          <td>Creation Date</td>
+          <td id="flipkart-research-creation-date"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!--<div class="card">
+  <div class="card-body">
+    <h4 class="card-title">Browse marketplaces</h4>
+    <div class="row">
+      <div class="col">
+        <div class="card">
+          <div class="card-body">
+            Amazon
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card">
+          <div class="card-body">
+            Flipkart
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card">
+          <div class="card-body">
+            Nykaa
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-5">
+  <div class="row">
+    <div class="col">
+      <h3>Column 1</h3>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
+      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
+    </div>
+    <div class="col">
+      <h3>Column 2</h3>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
+      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
+    </div>
+    <div class="col">
+      <h3>Column 3</h3>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
+      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
+    </div>
+  </div>
+</div>-->
