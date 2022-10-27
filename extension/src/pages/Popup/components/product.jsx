@@ -46,7 +46,8 @@ const Product = () => {
   }
 
   const openDrawer = () => {
-    setOpen(true)
+    // setOpen(true)
+    window.location.href = "https://google.com"
   }
   return (
     <PageHeader
@@ -71,11 +72,10 @@ const Product = () => {
           style={{ marginRight: '16px'}}
         />
         <Button
-          onClick={openDrawer}
         >
-        More details <PlusOutlined/>
+        <a href="https://www.google.com" target="_blank">More details <PlusOutlined/></a>
         </Button>
-        <Drawer
+        {/*<Drawer
           title={`Drawer`}
           placement="right"
           size="large"
@@ -93,7 +93,7 @@ const Product = () => {
           <p>Some contents...</p>
           <p>Some contents...</p>
           <p>Some contents...</p>
-        </Drawer>
+        </Drawer>*/}
       </Content>
     </PageHeader>
   );

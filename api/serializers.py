@@ -2,6 +2,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
+from rest_framework.authtoken.models import Token
 from django.contrib.auth.password_validation import validate_password
 
 from api.models import (
@@ -22,14 +23,15 @@ class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
       write_only=True, required=True, validators=[validate_password])
     password2 = serializers.CharField(write_only=True, required=True)
+    token = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = User
         fields = ('username', 'password', 'password2',
-             'email', 'first_name', 'last_name')
+             'email', 'first_name', 'last_name', 'token')
         extra_kwargs = {
           'first_name': {'required': True},
-          'last_name': {'required': True}
+          'last_name': {'required': False}
         }
 
     def validate(self, attrs):
@@ -48,6 +50,10 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
         return user
+
+    def get_token(self, obj):
+        token = Token.objects.get_or_create(user=obj)
+        return token[0].key
 
 
 class UserInfoSerializer(serializers.ModelSerializer):

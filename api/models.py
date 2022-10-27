@@ -21,6 +21,7 @@ class UserInfo(models.Model):
     company_name = models.CharField(max_length=255)
     phone_no = models.IntegerField(blank=False)
     how_found_us = models.IntegerField(choices=HOW_FOUND_US_CHOICES, default=OTHERS)
+    is_anonymous = models.BooleanField(default=False)
 
 
 class Collection(models.Model):
