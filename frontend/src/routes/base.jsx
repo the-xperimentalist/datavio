@@ -1,5 +1,5 @@
 import React from 'react'
-import { Layout, Menu, Breadcrumb } from 'antd'
+import { Layout, Menu } from 'antd'
 import logo from "../assets/logo.png"
 // import Navbar from '../components/navbar'
 
@@ -14,16 +14,14 @@ const Base = (params) => {
         theme="dark"
         mode="horizontal"
         selectable={false}
-        items={new Array(15).fill(null).map((_, index) => {
-          const key = index + 1;
-          return {
-            key,
-            label: `nav ${key}`,
-          };
-        })}
-      />
+      >
+        <Menu.Item key="1">Blog</Menu.Item>
+        <Menu.Item key="2">About</Menu.Item>
+        <Menu.Item key="3">Tools</Menu.Item>
+        <Menu.Item key="4">Contact</Menu.Item>
+      </Menu>
     </Header>
-    <Content style={{ padding: '0 50px' }}>
+    <Content style={{ padding: '0 50px', marginTop: 32 }}>
       <div className="site-layout-content">Content</div>
     </Content>
     <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>

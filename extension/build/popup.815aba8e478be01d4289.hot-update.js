@@ -17,9 +17,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Popup_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Popup.css */ "./src/pages/Popup/Popup.css");
 /* harmony import */ var antd__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! antd */ "./node_modules/antd/es/layout/index.js");
 /* harmony import */ var antd__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! antd */ "./node_modules/antd/es/typography/index.js");
-/* harmony import */ var _components_login__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/login */ "./src/pages/Popup/components/login.jsx");
-/* harmony import */ var _components_signup__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/signup */ "./src/pages/Popup/components/signup.jsx");
-/* harmony import */ var _components_Home__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/Home */ "./src/pages/Popup/components/Home.jsx");
+/* harmony import */ var _components_login__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./product/components/login */ "./src/pages/Popup/components/login.jsx");
+/* harmony import */ var _components_signup__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./product/components/signup */ "./src/pages/Popup/components/signup.jsx");
+/* harmony import */ var _components_Home__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./product/components/Home */ "./src/pages/Popup/components/Home.jsx");
 /* harmony import */ var _utils_api__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./utils/api */ "./src/pages/Popup/utils/api.jsx");
 /* module decorator */ module = __webpack_require__.hmd(module);
 (function () {
