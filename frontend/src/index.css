@@ -1,13 +1,322 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/*@import '~antd/dist/antd.css';*/
+@import 'antd/dist/antd.css';
+header {
+   width: 100%;
+   z-index: 1000;
+   top: 0;
+   background-color: #fff;
+}
+ header .header-content {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   height: 64px;
+   font-size: 14px;
+   padding: 0 24px;
+   width: 1152px;
+   margin: 0 auto;
+}
+ header .header-content h1 {
+   position: relative;
+}
+ header .header-content h1:before {
+   content: "";
+   position: absolute;
+   top: 10px;
+   left: 144px;
+   width: 1px;
+   height: 12px;
+   background: #999;
+}
+ header .header-content h1 a {
+   display: block;
+   width: 120px;
+   height: 32px;
+   background-size: 120px 32px;
+   text-indent: -999em;
+   margin-left: 40px;
+}
+ header .header-content h1 span {
+   position: absolute;
+   font-size: 14px;
+   font-weight: 400;
+   top: 6px;
+   left: 168px;
+   color: rgba(0,0,0,0.65);
+   white-space: nowrap;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+/*@import './default.less';*/
+ .home-page .fd-content {
+   min-width: 1216px;
+   background: #FFF;
+   font-family: PingFangSC, Helvetica Neue, Helvetica, PingFang SC-Light, Hiragino Sans GB, Microsoft YaHei, SimSun, sans-serif;
+}
+ .home-page h2, .home-page h3, .home-page h4, .home-page h5 {
+   font-weight: 100;
+}
+ .home-page .home-layout-wrapper {
+   width: 100%;
+   height: 720px;
+   text-align: center;
+   overflow: hidden;
+}
+ .home-page .home-layout-wrapper .home-layout {
+   margin: 0 auto;
+   width: 1152px;
+   padding: 0 24px;
+   overflow: hidden;
+   height: 100%;
+}
+ .home-page .home-layout-wrapper .home-layout >div {
+   float: left;
+   width: 100%;
+}
+ .home-page .home-layout-wrapper .home-layout .col .content-wrapper {
+   border-radius: 4px;
+   background: #fff;
+   cursor: pointer;
+   overflow: hidden;
+   position: relative;
+}
+ .home-page .home-layout-wrapper:nth-of-type(odd) {
+   background: #fff;
+}
+ .home-page .home-layout-wrapper:nth-of-type(even) {
+   background-color: #f7f7f7;
+}
+ .home-page h2, .home-page h3 {
+   text-align: center;
+   font-weight: normal;
+}
+ .home-page h2 {
+   font-size: 30px;
+   line-height: 38px;
+   color: ;
+   margin-top: 88px;
+}
+ .home-page h3 {
+   font-size: 24px;
+   line-height: 32px;
+   margin-bottom: 16px;
+   color: ;
+}
+ .home-page .line {
+   width: 40px;
+   height: 2px;
+   display: block;
+   background: #FFBF00;
+   margin: 16px auto 72px;
+}
+ .home-page .home-banner {
+   height: 656px;
+   color: #fff;
+}
+ .home-page .home-banner g, .home-page .home-banner ellipse {
+   transform-box: fill-box;
+}
+ .home-page .home-banner .home-layout {
+   height: 100%;
+   display: flex;
+   align-items: center;
+   padding-top: 0;
+   text-align: left;
+}
+ .home-page .home-banner .home-banner-content-wrapper, .home-page .home-banner .home-banner-image-wrapper {
+   width: 50%;
+   display: inline-block;
+}
+ .home-page .home-banner .home-banner-content-wrapper {
+   height: 178px;
+   margin-bottom: 40px;
+}
+ .home-page .home-banner h1 {
+   font-size: 38px;
+   line-height: 46px;
+   margin-bottom: 16px;
+   font-weight: normal;
+   color: rgba(0,0,0,.85);
+}
+ .home-page .home-banner p {
+   margin-bottom: 40px;
+   font-size: 20px;
+   line-height: 28px;
+   color: rgba(0,0,0,.43);
+}
+ .home-page .home-banner span {
+   display: inline-block;
+}
+ .home-page .home-banner button {
+   width: 168px;
+   height: 48px;
+   font-size: 20px;
+   margin-top: 5px;
+   margin-right: 20px;
+}
+ .home-page .home-banner .home-banner-image-wrapper {
+   text-align: center;
+   margin-top: -120px;
+}
+ .home-page .home-func-wrapper {
+   height: 720px;
+   text-align: center;
+}
+ .home-page .home-func-wrapper .image {
+   height: 240px;
+   position: relative;
+   background-position: bottom center;
+   background-repeat: no-repeat;
+   background-size: 90% auto;
+   margin-bottom: 62px;
+}
+ .home-page .home-func-wrapper .col {
+   height: 400px;
+}
+ .home-page .home-func-wrapper p {
+   font-size: 16px;
+   color: ;
+}
+ .home-page .home-hover {
+   border: 1px solid #E9E9E9;
+   transition: transform .45s cubic-bezier(0.645,0.045,0.355,1), box-shadow .45s cubic-bezier(0.645,0.045,0.355,1), border .45s cubic-bezier(0.645,0.045,0.355,1);
+}
+ .home-page .home-hover:hover {
+   transform: translateY(-4px);
+   box-shadow: 0 2px 24px rgba(0,0,0,0.1);
+   border-color: #fff;
+}
+ .home-page .home-case-wrapper .col .content-wrapper {
+   height: 360px;
+   padding: 16px;
+}
+ .home-page .home-case-wrapper .col .content-wrapper .image {
+   width: 100%;
+   height: 100%;
+   border-radius: 2px;
+   background-position: center;
+   background-repeat: no-repeat;
+   background-size: cover;
+}
+ .home-page .home-case-wrapper .col .content-wrapper:hover .code-wrapper {
+   opacity: 1;
+}
+ .home-page .home-case-wrapper .col .code-wrapper {
+   position: absolute;
+   background: rgba(255,255,255,0.9);
+   width: 100%;
+   height: 100%;
+   top: 0;
+   left: 0;
+   opacity: 0;
+   transition: opacity 0.45s cubic-bezier(0.165,0.84,0.44,1);
+}
+ .home-page .home-case-wrapper .col .code-wrapper h4 {
+   font-size: 16px;
+   font-weight: normal;
+   margin: 72px auto 12px;
+   color: ;
+}
+ .home-page .home-serve-wrapper {
+   height: 788px;
+   text-align: center;
+}
+ .home-page .home-serve-wrapper .col {
+   font-size: 16px;
+}
+ .home-page .home-serve-wrapper .col .content-wrapper {
+   padding: 24px 16px;
+   height: 220px;
+}
+ .home-page .home-serve-wrapper .col .content-wrapper .icon-hover {
+   opacity: 0;
+   transition: opacity .45s;
+}
+ .home-page .home-serve-wrapper .col .content-wrapper:hover .icon-hover {
+   opacity: 1;
+}
+ .home-page .home-serve-wrapper .col .content-wrapper:hover p {
+   color: rgba(0,0,0,0.65);
+}
+ .home-page .home-serve-wrapper .col .image {
+   width: 32px;
+   height: 32px;
+   margin: 8px auto 12px;
+}
+ .home-page .home-serve-wrapper .col h3 {
+   margin-bottom: 24px;
+}
+ .home-page .home-serve-wrapper .col p {
+   margin-bottom: 12px;
+   color: ;
+   transition: color .3s;
+   font-weight: 400;
+}
+ .home-page .home-serve-wrapper .col .exp {
+   position: absolute;
+   bottom: 24px;
+   left: 0;
+   width: 100%;
+   font-size: 20px;
+   color: rgba(0,0,0,0.25);
+}
+ .home-page .home-user-wrapper {
+   height: 440px;
+}
+ .home-page .home-user-wrapper h2 {
+   margin-top: 64px;
+}
+ .home-page .home-user-wrapper .col {
+   margin-bottom: 32px;
+}
+ .home-page .home-user-wrapper .col i {
+   display: block;
+   width: 170px;
+   height: 56px;
+   background-repeat: no-repeat;
+   background-position: center;
+   margin: auto;
+}
+
+.home-page .home-footer-wrapper {
+   height: 336px;
+   background: #404040 !important;
+   color: rgba(255,255,255,0.65);
+   font-size: 14px;
+}
+ .home-page .home-footer-wrapper .home-layout {
+   padding: 72px 32px 0;
+}
+ .home-page .home-footer-wrapper .home-layout .copy {
+   color: rgba(255,255,255,0.43);
+}
+ .home-page .home-footer-wrapper .home-footer-nav-wrapper {
+   margin: 48px auto 16px;
+}
+ .home-page .home-footer-wrapper .home-footer-nav-wrapper > div {
+   display: inline-block;
+   padding: 0 36px;
+   border-right: 1px solid #fff;
+}
+ .home-page .home-footer-wrapper .home-footer-nav-wrapper > div:last-child {
+   border-right: none;
+}
+ .home-page .home-footer-wrapper .home-footer-nav-wrapper > div a {
+   display: block;
+   color: rgba(255,255,255,0.65);
+   font-size: 16px;
+   line-height: 16px;
+}
+ .home-page .home-footer-wrapper .logo {
+   margin-bottom: 5px;
+}
+.home-page .analyze-container {
+  display: flex;
+
+}
+.home-page .analyze-container .left-nav {
+  margin: 24px;
+}
+.home-page .analyze-container .anchor-content {
+  height: 1440px;
+  overflow: auto;
 }
