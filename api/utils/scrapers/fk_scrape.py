@@ -95,14 +95,19 @@ def get_reviews_for_listing(list_url):
 
 
 def get_product_sellers(list_url):
-    updated_url = f"https://www.flipkart.com{list_url}"
+    if not "https://www.flipkart.com" in list_url:
+        updated_url = f"https://www.flipkart.com{list_url}"
+    else:
+        updated_url = list_url
     seller_list_html = requests.get(updated_url)
     # seller_list_soup = BeautifulSoup(seller_list_html.content, "html5lib")
+    print("H1")
 
     # Selenium. Current series. Eventually in parallel
-    # ops = Options(headless=True)
-    # driver = webdriver.Chrome(options=options)
-    driver = webdriver.Chrome()
+    ops = Options()
+    ops.headless = True
+    driver = webdriver.Chrome(options=ops)
+    # driver = webdriver.Chrome()
     driver.get(updated_url)
 
     seller_list_soup = BeautifulSoup(driver.page_source, "html5lib")
@@ -138,7 +143,7 @@ def get_product_sellers(list_url):
         seller_popup_close_btn = driver.find_element(By.XPATH, seller_popup_close_btn_xpath)
         seller_popup_close_btn.click()
 
-        time.sleep(5)
+        time.sleep(0.1)
 
     driver.quit()
 
@@ -250,9 +255,11 @@ def scrape_fk_link(link_url, get_cat_comparison=True):
 
 
     # Selenium stuff. Eventually, parallelism
-    # ops = Options(headless=True)
-    # driver = webdriver.Chrome(options=options)
-    driver = webdriver.Chrome()
+
+    ops = Options()
+    ops.headless = True
+    driver = webdriver.Chrome(options=ops)
+    # driver = webdriver.Chrome()
     driver.get(link_url)
 
     x_path_read_more = '//*[@id="container"]/div/div[3]/div[1]/div[2]/div[9]/div[5]/div/div[2]/button'
@@ -310,9 +317,9 @@ def scrape_fk_link(link_url, get_cat_comparison=True):
 
     return fk_out_json
 
-link_url1="https://www.flipkart.com/infinix-x1-slim-series-core-i3-10th-gen-8-gb-256-gb-ssd-windows-11-home-xl21-thin-light-laptop/p/itma1003dc991f9f?pid=COMGEHP5EFEGWZW5&lid=LSTCOMGEHP5EFEGWZW5AGHTBE&marketplace=FLIPKART&fm=personalisedRecommendation%2Fp2p-same&iid=R%3As%3Bp%3ACOMGG3S9XZV4PWHB%3Bpt%3Ahp%3Buid%3A38c7eb78-643a-11ed-9e9c-bf909c01bc4b%3B.COMGEHP5EFEGWZW5&ssid=o1o2uwp56107l4ao1668443675346&otracker=hp_reco_You%2BMay%2BLike..._3_8.productCard.PMU_V2_Infinix%2BX1%2BSlim%2BSeries%2BCore%2Bi3%2B10th%2BGen%2B-%2B%25288%2BGB%252F256%2BGB%2BSSD%252FWindows%2B11%2BHome%2529%2BXL21%2BThin%2Band%2BLight%2BLaptop_COMGEHP5EFEGWZW5_personalisedRecommendation%2Fp2p-same_2&otracker1=hp_reco_WHITELISTED_personalisedRecommendation%2Fp2p-same_You%2BMay%2BLike..._DESKTOP_HORIZONTAL_productCard_cc_3_NA_view-all&cid=COMGEHP5EFEGWZW5"
-# scrape_fk_link(link_url1)
-scrape_fk_link(link_url1, False)
+# link_url1="https://www.flipkart.com/infinix-x1-slim-series-core-i3-10th-gen-8-gb-256-gb-ssd-windows-11-home-xl21-thin-light-laptop/p/itma1003dc991f9f?pid=COMGEHP5EFEGWZW5&lid=LSTCOMGEHP5EFEGWZW5AGHTBE&marketplace=FLIPKART&fm=personalisedRecommendation%2Fp2p-same&iid=R%3As%3Bp%3ACOMGG3S9XZV4PWHB%3Bpt%3Ahp%3Buid%3A38c7eb78-643a-11ed-9e9c-bf909c01bc4b%3B.COMGEHP5EFEGWZW5&ssid=o1o2uwp56107l4ao1668443675346&otracker=hp_reco_You%2BMay%2BLike..._3_8.productCard.PMU_V2_Infinix%2BX1%2BSlim%2BSeries%2BCore%2Bi3%2B10th%2BGen%2B-%2B%25288%2BGB%252F256%2BGB%2BSSD%252FWindows%2B11%2BHome%2529%2BXL21%2BThin%2Band%2BLight%2BLaptop_COMGEHP5EFEGWZW5_personalisedRecommendation%2Fp2p-same_2&otracker1=hp_reco_WHITELISTED_personalisedRecommendation%2Fp2p-same_You%2BMay%2BLike..._DESKTOP_HORIZONTAL_productCard_cc_3_NA_view-all&cid=COMGEHP5EFEGWZW5"
+# # scrape_fk_link(link_url1)
+# scrape_fk_link(link_url1, False)
 
 # seller_link="/sellers?pid=MOBG6VF5GXVFTQ5Y&otracker=hp_reco_More%252Bto%252BExplore_4_8.productCard.PMU_V2_APPLE%252BiPhone%252B13%252B%252528Pink%25252C%252B128%252BGB%252529_MOBG6VF5GXVFTQ5Y_personalisedRecommendation%252Fp2p-same_3&fetchId=4d44ac86-c3d3-48bd-acc7-a5943455ab78.MOBG6VF5GXVFTQ5Y"
 # seller_link="/sellers?pid=POSGDAQ2Z7XDNGHQ&otracker=search&fetchId=50114908-3307-412e-9d33-bad8a25eaa44.POSGDAQ2Z7XDNGHQ"
