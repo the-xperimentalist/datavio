@@ -21,3 +21,9 @@ yarn-error.log*
 
 venv/
 __pycache__/
+
+# test notebook
+*.ipynb
+.ipynb_checkpoints/
+
+*.rdb

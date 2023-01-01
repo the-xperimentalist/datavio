@@ -1,4 +1,6 @@
 
+import requests
+from bs4 import BeautifulSoup
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib import auth
@@ -13,7 +15,11 @@ from celery.result import AsyncResult
 from api.serializers import (
     UserSerializer, RegisterSerializer, UserInfoSerializer, CollectionSerializer, SiteSerializer)
 from api.models import (
-    Collection, UserInfo, Site)
+    Collection,
+    UserInfo,
+    Site,
+    ContactUser,
+    AnalyzeSite)
 from api.tasks.fk_tasks import (
     get_fk_reviews,
     get_sellers_info,
@@ -82,25 +88,35 @@ class AnalyzeSiteAPI(APIView):
         We post with the url and create an object of analyzesite with the respective tasks
         In case of the user requesting details sent to them. We ask the user details with the id
         """
+        print("H1")
         url = request.data["url"]
-        site_analysis = AnalyzeSite(url=url)
-        site_analysis.save()
+        site_analyses = AnalyzeSite.objects.filter(url=url)
+        if site_analyses.count():
+            site_analysis = site_analyses.first()
+        else:
+            site_analysis = AnalyzeSite(url=url, site_data={}, fetched_infos=[])
+            site_analysis.save()
+        print("H2")
         return_json = {}
         return_json["id"] = site_analysis.id
 
+        print("H3")
         # summary
         summary_task = get_product_summary.delay(site_analysis.id)
         return_json["summary"] = summary_task.task_id
 
+        print("H4")
         product_html = requests.get(url)
         product_soup = BeautifulSoup(product_html.content, "html5lib")
         sellers_href_link = product_soup.find("li", {"class": "_38I6QT"}).findChildren("a", recursive=False)[0].attrs["href"]
         # sellers info
-        sellers_info_task = get_sellers_info.delay(sellers_href_link)
+        sellers_info_task = get_sellers_info.delay(site_analysis.id, sellers_href_link)
         return_json["sellers_info"] = sellers_info_task.task_id
 
+        print("H5")
         # reviews
-        reviews_task = get_fk_reviews.delay(site_analysis.id)
+        reviews_url = product_soup.find("div", {"class": "_3UAT2v _16PBlm"}).parent.attrs["href"]
+        reviews_task = get_fk_reviews.delay(site_analysis.id, reviews_url)
         return_json["reviews"] = reviews_task.task_id
 
         return Response(return_json, status=status.HTTP_200_OK)

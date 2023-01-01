@@ -5,6 +5,7 @@ import { useParams, useNavigate } from "react-router-dom"
 import axios from "axios"
 import { Anchor, Row, Col, Typography } from "antd"
 
+import { API_URL } from "../../utils/constants"
 import KeywordAnalysis from "./KeywordAnalysis"
 import PriceHistory from "./PriceHistory"
 import ProductSpy from "./ProductSpy"
@@ -18,6 +19,19 @@ const { Link } = Anchor;
 function AnalyzeView (props) {
   const navigate = useNavigate()
   const { url } = useParams()
+
+  const requestSiteDetails = () => {
+    const postData = {url: decodeURIComponent(url)}
+    axios.post(`${API_URL}/analyze-site`, postData)
+      .then(({data}) => {
+        console.log(data)
+      })
+  }
+
+  useEffect(() => {
+    console.log("Here")
+    requestSiteDetails()
+  }, [url])
 
   return (
     <div className="analyze-container">

@@ -51,23 +51,30 @@ To do:
 # def get_cat_items_list_view(soup_instance)
 
 
-def get_reviews_for_listing(list_url):
+def get_reviews_for_listing(review_url):
     # updated_url = f"https://www.flipkart.com{list_url}"
     # reviews_link = requests.get(updated_url)
+    if not "https://www.flipkart.com" in review_url:
+        list_url = f"https://www.flipkart.com{review_url}"
+    else:
+        list_url = review_url
     reviews_link = requests.get(list_url)
     reviews_soup = BeautifulSoup(reviews_link.content, "html5lib")
 
     output_dict = {}
-    print(type(reviews_soup.find("div", {"class": "_2d4LTz"})))
+    # print(type(reviews_soup.find("div", {"class": "_2d4LTz"})))
     output_dict["review"] = reviews_soup.find("div", attrs={"class": "_2d4LTz"}).text
     rating_review_elem = reviews_soup.findAll("div", attrs={"class": "row _2afbiS"})
     output_dict["no_of_ratings"] = rating_review_elem[0].text[:-10]
     output_dict["no_of_reviews"] = rating_review_elem[1].text[:-8]
     total_reviews_pages = int(reviews_soup.find("div", attrs={"class": "_2MImiq _1Qnn1K"}).findChildren("span", recursive=False)[0].text[10:])
     all_reviews = []
+    print("total_reviews_pages: ", total_reviews_pages)
+    ct=0
     for review_page in range(total_reviews_pages):
-        review_page_url = f"{list_url}&page={review_page}"
-        print("review_page: ", review_page_url)
+        review_page_url = f"{list_url}&page={review_page+1}"
+        print("Review page url: ", review_page_url)
+        # print("review_page: ", review_page_url)
         # Current review doesn't take into consideration the read more present in some reviews
         reviews_page_link = requests.get(review_page_url)
         reviews_page_soup = BeautifulSoup(reviews_page_link.content, "html5lib")
@@ -85,12 +92,14 @@ def get_reviews_for_listing(list_url):
             item_title = body_item.find("p", attrs={"class": "_2-N8zT"})
             item_stars = body_item.find("div", attrs={"class": "_3LWZlK _1BLPMq"})
             all_reviews.append({
-                "title": item_title if item_title else "",
-                "description": item_descr if item_descr else "",
-                "star": item_stars if item_stars else "",
-                "page": review_page
+                "title": item_title.text if item_title else "",
+                "description": item_descr.text if item_descr else "",
+                "star": item_stars.text if item_stars else "",
+                "page": review_page+1
                 })
+            ct = ct+1
         # print("new body items: ", len(all_reviews))
+    print(ct)
     return all_reviews
 
 
@@ -101,7 +110,7 @@ def get_product_sellers(list_url):
         updated_url = list_url
     seller_list_html = requests.get(updated_url)
     # seller_list_soup = BeautifulSoup(seller_list_html.content, "html5lib")
-    print("H1")
+    # print("H1")
 
     # Selenium. Current series. Eventually in parallel
     ops = Options()
@@ -114,21 +123,21 @@ def get_product_sellers(list_url):
 
     seller_names = seller_list_soup.findAll("div", {"class": "_3enH42"})
     seller_scores = seller_list_soup.findAll("div", {"class": "_3LWZlK _2GCNvL"})
-    print(seller_names)
-    print(seller_scores)
+    # print(seller_names)
+    # print(seller_scores)
 
     output_dict = []
 
     for i in range(len(seller_names)):
         x_path = f"/html/body/div/div/div[3]/div/div/div/div[2]/div[2]/div[{i+1}]/div[1]/div[1]/span"
-        print("x_path: ", x_path)
+        # print("x_path: ", x_path)
         seller_click_element = driver.find_element(By.XPATH, x_path)
         seller_click_element.click()
         time.sleep(5)
 
         clicked_seller_soup = BeautifulSoup(driver.page_source, "html5lib")
         score_items = clicked_seller_soup.findAll("text", {"class": "_2Ix0io"})
-        print(score_items)
+        # print(score_items)
 
         output_dict.append({
             "sellerName": seller_names[i].text,
@@ -136,7 +145,7 @@ def get_product_sellers(list_url):
             "productQuality": score_items[0].text,
             "serviceQuality": score_items[1].text
             })
-        print(output_dict)
+        # print(output_dict)
 
         # seller_popup_close_btn_xpath = "/html/body/div/div/div[1]/div/button"
         seller_popup_close_btn_xpath = "/html/body/div[1]/div/div[1]/div/button"
@@ -151,29 +160,29 @@ def get_product_sellers(list_url):
 
 
 def get_category_ranking(list_url, link_url, get_cat_comparison=True):
-    print("h2")
+    # print("h2")/
     updated_url = f"https://www.flipkart.com{list_url}"
-    print(updated_url)
+    # print(updated_url)
     category_listing_html = requests.get(updated_url)
     category_listing_soup = BeautifulSoup(category_listing_html.content, "html5lib")
 
     category_items = category_listing_soup.findAll("div", {"class": "_2kHMtA"})
     output_dict = {}
-    print("h3\n\n")
+    # print("h3\n\n")
     # pprint(category_items)
     if len(category_items):
         # List view
         count = 0
-        print("h4_1\n\n")
+        # print("h4_1\n\n")
         for item in category_items:
             is_ad = item.findAll("div", {"class": "_2tfzpE"})
-            print("is_ad: ", is_ad)
+            # print("is_ad: ", is_ad)
             if len(is_ad):
                 continue
             a_item = item.findAll("a", {"class": "_1fQZEK"})[0]
-            print("a_item: ", a_item)
+            # print("a_item: ", a_item)
             a_item_href = a_item.attrs["href"]
-            print("a_item_href: ", a_item_href)
+            # print("a_item_href: ", a_item_href)
             count = count + 1
             if a_item_href in link_url:
                 break
@@ -187,25 +196,66 @@ def get_category_ranking(list_url, link_url, get_cat_comparison=True):
         # Grid view
         category_items = category_listing_soup.findAll("div", {"class": "_4ddWXP"})
         count = 0
-        print("h4_2\n\n")
+        # print("h4_2\n\n")
         # pprint(category_items)
         for item in category_items:
             is_ad = item.findAll("div", {"class": "_4HTuuX"})
-            print("is_ad: ", is_ad)
+            # print("is_ad: ", is_ad)
             if len(is_ad):
                 continue
             a_item = item.findAll("a", {"class": "_2rpwqI"})[0]
-            print("a_item: ", a_item)
+            # print("a_item: ", a_item)
             a_item_href = a_item.attrs["href"]
-            print("a_item_href: ", a_item_href)
+            # print("a_item_href: ", a_item_href)
             count = count + 1
             if a_item_href in link_url:
                 break
         output_dict["first_page"] = True if count < len(category_items) else False
         output_dict["first_page_pos"] = count
         output_dict["no_of_first_page"] = len(category_items)
-    pprint(output_dict)
+    # pprint(output_dict)
     return output_dict
+
+
+def summary_fk_link(link_url):
+    product_html = requests.get(link_url)
+    product_soup = BeautifulSoup(product_html.content, "html5lib")
+    fk_out_json = {}
+    page_title = product_soup.title.text
+    fk_out_json["page_title"] = page_title
+    product_title = product_soup.find("span", attrs={"class": "B_NuCI"}).text
+    fk_out_json["product_title"] = product_title
+
+    product_pagn = product_soup.findAll("a", attrs={"class": "_2whKao"})
+    product_brand = product_pagn[-1]
+    product_brand_name = product_brand.text
+    fk_out_json["product_brand_name"] = product_brand_name
+    product_brand_href = product_brand.attrs["href"]
+    fk_out_json["fk_assured"] = not isinstance(product_soup.find("img", {"class": "jMnjzX"}), type(None))
+    fk_out_json["description"] =  product_soup.find("div",{'class':'_1mXcCf RmoJUa'}).text
+    fk_out_json["rating"] = product_soup.find("div",{"class":"_2d4LTz"}).text
+    fk_out_json["no_of_ratings"] = product_soup.findAll("div",{"class":"row _2afbiS"})[0].text[:-10]
+    fk_out_json["no_of_reviews"] = product_soup.findAll("div",{"class":"row _2afbiS"})[1].text[:-8]
+    fk_out_json["no_of_images"] = len(product_soup.findAll("li",{"class":"_20Gt85 _1Y_A6W"}))
+    # fk_out_json["category"] = product_soup.findAll("a", {"class": "_2whKao"})
+    fk_out_json["final_price"] = product_soup.find("div", {"class": "_30jeq3 _16Jk6d"}).text
+    fk_out_json["mrp"] = product_soup.find("div", {"class": "_3I9_wc _2p6lqe"}).text
+    fk_out_json["discount"] = product_soup.find("div", {"class": "_3Ay6Sb _31Dcoz"}).text
+    fk_out_json["categories"] = {}
+    # print("h1")
+    # print(fk_out_json)
+    # print(product_pagn)
+    # for item in product_pagn[1:-1]:
+    #     fk_out_json["categories"][item.text] = get_category_ranking(item.attrs["href"], link_url, get_cat_comparison)
+    fk_out_json["top_seller_name"] = product_soup.findAll("div", {"class": "_1RLviY", "id": "sellerName"})[0].text
+    fk_out_json["top_seller_stars"] = product_soup.findAll("div", {"class": "_3LWZlK _1D-8OL"})[0].text
+
+    fk_sellers_listing_class = "_38I6QT"
+    sellers_href_link = product_soup.find("li", {"class": "_38I6QT"}).findChildren("a", recursive=False)[0].attrs["href"]
+    fk_out_json["top_seller_name"] = product_soup.findAll("div", {"class": "_1RLviY", "id": "sellerName"})[0].text
+    fk_out_json["top_seller_stars"] = product_soup.findAll("div", {"class": "_3LWZlK _1D-8OL"})[0].text
+
+    return fk_out_json
 
 
 def scrape_fk_link(link_url, get_cat_comparison=True):
@@ -236,21 +286,21 @@ def scrape_fk_link(link_url, get_cat_comparison=True):
     fk_out_json["mrp"] = product_soup.find("div", {"class": "_3I9_wc _2p6lqe"}).text
     fk_out_json["discount"] = product_soup.find("div", {"class": "_3Ay6Sb _31Dcoz"}).text
     fk_out_json["categories"] = {}
-    print("h1")
-    print(fk_out_json)
-    print(product_pagn)
+    # print("h1")
+    # print(fk_out_json)
+    # print(product_pagn)
     for item in product_pagn[1:-1]:
         fk_out_json["categories"][item.text] = get_category_ranking(item.attrs["href"], link_url, get_cat_comparison)
     fk_out_json["top_seller_name"] = product_soup.findAll("div", {"class": "_1RLviY", "id": "sellerName"})[0].text
     fk_out_json["top_seller_stars"] = product_soup.findAll("div", {"class": "_3LWZlK _1D-8OL"})[0].text
 
-    fk_sellers_listing_class = "_38I6QT"
-    sellers_href_link = product_soup.find("li", {"class": "_38I6QT"}).findChildren("a", recursive=False)[0].attrs["href"]
+    # fk_sellers_listing_class = "_38I6QT"
+    # sellers_href_link = product_soup.find("li", {"class": "_38I6QT"}).findChildren("a", recursive=False)[0].attrs["href"]
 
-    pprint(fk_out_json)
-    fk_out_json["sellers"] = get_product_sellers(sellers_href_link)
-    print("h1")
-    print(fk_out_json)
+    # pprint(fk_out_json)
+    # fk_out_json["sellers"] = get_product_sellers(sellers_href_link)
+    # print("h1")
+    # print(fk_out_json)
 
 
 
@@ -281,7 +331,7 @@ def scrape_fk_link(link_url, get_cat_comparison=True):
     # print("manufacturer_details: ", manufacturer_details)
     fk_out_json["manufacturer_details"] = manufacturer_details
 
-    pprint(fk_out_json)
+    # pprint(fk_out_json)
 
     driver.quit()
 
