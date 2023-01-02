@@ -40,6 +40,7 @@ function Banner (props) {
             </Button>
             <Button
               type="primary"
+              onClick={props.showModal}
             >
               This is button
             </Button>

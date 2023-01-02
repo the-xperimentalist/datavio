@@ -32,6 +32,7 @@ from api.utils.constants import (
     REVENUE_INSIGHTS_STATE,
     SELLER_INFO_STATE,
     SUMMARY_STATE)
+from api.utils.scrapers.fk_scrape import summary_fk_link
 
 
 class UserDetailAPI(APIView):
@@ -88,6 +89,7 @@ class AnalyzeSiteAPI(APIView):
         We post with the url and create an object of analyzesite with the respective tasks
         In case of the user requesting details sent to them. We ask the user details with the id
         """
+        print(request.data)
         print("H1")
         url = request.data["url"]
         site_analyses = AnalyzeSite.objects.filter(url=url)
@@ -103,7 +105,8 @@ class AnalyzeSiteAPI(APIView):
         print("H3")
         # summary
         summary_task = get_product_summary.delay(site_analysis.id)
-        return_json["summary"] = summary_task.task_id
+        return_json["summary_task"] = summary_task.task_id
+        return_json["summary"] = summary_fk_link(url)
 
         print("H4")
         product_html = requests.get(url)

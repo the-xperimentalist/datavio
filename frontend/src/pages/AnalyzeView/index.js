@@ -1,9 +1,9 @@
 
 import DocumentTitle from 'react-document-title';
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import axios from "axios"
-import { Anchor, Row, Col, Typography } from "antd"
+import { Anchor, Row, Col, Typography, Modal, Form, Input } from "antd"
 
 import { API_URL } from "../../utils/constants"
 import KeywordAnalysis from "./KeywordAnalysis"
@@ -19,12 +19,57 @@ const { Link } = Anchor;
 function AnalyzeView (props) {
   const navigate = useNavigate()
   const { url } = useParams()
+  const [loading, setLoading] = useState(true)
+  const [siteAnalysisId, setSiteAnalysisId] = useState(-1)
 
+  const [sellerInfo, setSellerInfo] = useState({})
+  const [sellerInfoFetched, setSellerInfoFetched] = useState(false)
+
+  const [reviews, setReviews] = useState([])
+  const [reviewsFetched, setReviewsFetched] = useState(false)
+
+  const [summary, setSummary] = useState({})
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const intervalRef = useRef(null)
+
+  // summary with respect to manufacturer info is seperate
   const requestSiteDetails = () => {
-    const postData = {url: decodeURIComponent(url)}
+    const postData = {url: url.slice(0,-1)}
     axios.post(`${API_URL}/analyze-site`, postData)
       .then(({data}) => {
+        setLoading(false)
         console.log(data)
+        setSiteAnalysisId(data.id)
+        setSummary(data.summary)
+        intervalRef.current = setInterval(() => {
+          checkCompletedTaskStatus(data.sellers_info, data.reviews)
+        }, 5000)
+      })
+  }
+
+  const checkCompletedTaskStatus = (sellersInfoTaskId, reviewsceleryTaskId) => {
+    console.log(sellersInfoTaskId)
+    console.log(reviewsceleryTaskId)
+    axios.get(`${API_URL}/celery-task/${reviewsceleryTaskId}`)
+      .then(({data}) => {
+        if (data.status === "SUCCESS") {
+          axios.get(`${API_URL}/celery-task/${sellersInfoTaskId}`)
+            .then(({data}) => {
+              if (data.status === "SUCCESS") {
+                getCompletedSiteDetails()
+                clearInterval(intervalRef.current)
+              }
+            })
+        }
+      })
+  }
+
+  const getCompletedSiteDetails = () => {
+    axios.get(`${API_URL}/site-analysis-results/${siteAnalysisId}`)
+      .then(({data}) => {
+        console.log(data)
+        setSellerInfoFetched(true)
+        setReviewsFetched(true)
       })
   }
 
@@ -33,63 +78,134 @@ function AnalyzeView (props) {
     requestSiteDetails()
   }, [url])
 
+  const showModal = () => {
+    console.log("Here")
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  const onFinishFailed = (errorInfo) => {
+    console.log('Failed:', errorInfo);
+  };
+
   return (
     <div className="analyze-container">
-      <div className="left-nav">
-        <Anchor>
-          <Link
-            href="#summary"
-            title="Listing Summary"
-          />
-          <Link
-            href="#reviews"
-            title="Review Insights"
-          />
-          <Link
-            href="#seller"
-            title="Seller Info"
-          />
-          <Link
-            href="#spy"
-            title="Product Spy"
-          />
-          <Link
-            href="#revenue"
-            title="Revenue Insights"
-          />
-          <Link
-            href="#price"
-            title="Price History"
-          />
-          <Link
-            href="#keyword"
-            title="Keyword Analysis"
-          />
-        </Anchor>
-      </div>
-      <div className="anchor-content">
-        <Summary
-          url={decodeURIComponent(url)}
-        />
-        <ReviewInsights
-          url={decodeURIComponent(url)}
-        />
-        <SellerInfo
-          url={decodeURIComponent(url)}
-        />
-        <ProductSpy
-          url={decodeURIComponent(url)}
-        />
-        <RevenueInsights
-          url={decodeURIComponent(url)}
-        />
-        <PriceHistory
-          url={decodeURIComponent(url)}
-        />
-        <KeywordAnalysis
-          url={decodeURIComponent(url)}
-        />
-      </div>
+      {
+        loading ? (
+          <div>Loading...</div>) : (
+          <>
+            <div className="left-nav">
+              <Anchor>
+                <Link
+                  href="#summary"
+                  title="Listing Summary"
+                />
+                <Link
+                  href="#reviews"
+                  title="Review Insights"
+                />
+                <Link
+                  href="#seller"
+                  title="Seller Info"
+                />
+                <Link
+                  href="#spy"
+                  title="Product Spy"
+                />
+                <Link
+                  href="#revenue"
+                  title="Revenue Insights"
+                />
+                <Link
+                  href="#price"
+                  title="Price History"
+                />
+                <Link
+                  href="#keyword"
+                  title="Keyword Analysis"
+                />
+              </Anchor>
+            </div>
+            <div className="anchor-content">
+              <Summary
+                url={decodeURIComponent(url)}
+                summary={summary}
+                showModal={showModal}
+              />
+              <ReviewInsights
+                url={decodeURIComponent(url)}
+                showModal={showModal}
+                reviews={reviews}
+                reviewsFetched={reviewsFetched}
+              />
+              <SellerInfo
+                url={decodeURIComponent(url)}
+                showModal={showModal}
+                sellerInfo={sellerInfo}
+                sellerInfoFetched={sellerInfoFetched}
+              />
+              <ProductSpy
+                url={decodeURIComponent(url)}
+                showModal={showModal}
+              />
+              <RevenueInsights
+                url={decodeURIComponent(url)}
+                showModal={showModal}
+              />
+              <PriceHistory
+                url={decodeURIComponent(url)}
+                showModal={showModal}
+              />
+              <KeywordAnalysis
+                url={decodeURIComponent(url)}
+                showModal={showModal}
+              />
+            </div>
+            <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+              <Form
+                name="basic"
+                labelCol={{ span: 8 }}
+                wrapperCol={{ span: 16 }}
+                initialValues={{ remember: true }}
+                onFinish={handleOk}
+                onFinishFailed={onFinishFailed}
+                autoComplete="off"
+              >
+                <Form.Item
+                  label="Name"
+                  name="name"
+                  rules={[{ required: true, message: 'Please input your name!' }]}
+                >
+                  <Input />
+                </Form.Item>
+
+                <Form.Item
+                  label="Email"
+                  name="email"
+                  rules={[{ required: true, message: 'Please input your email!' }]}
+                >
+                  <Input />
+                </Form.Item>
+
+                <Form.Item
+                  label="Phone"
+                  name="phone"
+                  rules={[{ required: true, message: 'Please input your phone number!' }]}
+                >
+                  <Input />
+                </Form.Item>
+              </Form>
+            </Modal>
+          </>)
+      }
+
     </div>)
 }
 

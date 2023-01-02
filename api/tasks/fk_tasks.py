@@ -10,6 +10,7 @@ from api.utils.constants import (
     REVENUE_INSIGHTS_STATE,
     SELLER_INFO_STATE,
     SUMMARY_STATE)
+from pprint import pprint
 
 
 @shared_task
@@ -20,6 +21,7 @@ def get_fk_reviews(to_analyse_id, review_url):
     print("review H1")
     site_details = AnalyzeSite.objects.get(id=to_analyse_id)
     reviews_for_url = get_reviews_for_listing(review_url)
+    # pprint("reviews: ", reviews_for_url)
     older_site_data = site_details.site_data
     if not older_site_data:
         older_site_data = {}
@@ -43,6 +45,7 @@ def get_sellers_info(to_analyse_id, seller_link):
     print("seller H1")
     site_details = AnalyzeSite.objects.get(id=to_analyse_id)
     product_sellers = get_product_sellers(seller_link)
+    # pprint(product_sellers)
     older_site_data = site_details.site_data
     print("seller H2")
     if not older_site_data:
@@ -65,6 +68,7 @@ def get_product_summary(to_analyse_id):
     print("summary H1")
     site_details = AnalyzeSite.objects.get(id=to_analyse_id)
     listing_summary = summary_fk_link(site_details.url)
+    pprint(listing_summary)
     older_site_data = site_details.site_data
     if not older_site_data:
         older_site_data = {}

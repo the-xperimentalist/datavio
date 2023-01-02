@@ -1,24 +1,21 @@
 
+import { Typography, Button } from "antd"
+
+const { Title } = Typography
+
 
 // Price history etc for the app
 // Currently locked. Sign up to use
 function PriceHistory (props) {
     return (
         <div id="price">
-          <h1>Price History</h1>
-          {[0, 1, 2, 3, 4].map((item) => {
-            return (
-              <p key={item}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum.
-              </p>
-            );
-          })}
+          <Title level={2}>Price History</Title>
+          <Title level={4}>Check how the price has been changing over time, and the related discounts during which times they happened</Title>
+          <Title level={5}>We are developing the feature right now. However, you can sign up so that we can let you know once it is completed</Title>
+          <Button
+            type="primary"
+            onClick={props.showModal}
+          >Notify Me</Button>
         </div>)
 }
 

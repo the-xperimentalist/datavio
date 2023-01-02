@@ -24,6 +24,7 @@ function Section2 (props) {
             <span key="button">
               <Button
                 type="primary"
+                onClick={props.showModal}
               >
                 Try Extension
               </Button>

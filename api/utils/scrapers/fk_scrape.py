@@ -227,12 +227,15 @@ def summary_fk_link(link_url):
     fk_out_json["product_title"] = product_title
 
     product_pagn = product_soup.findAll("a", attrs={"class": "_2whKao"})
+    print(product_pagn[1:-1])
+    cats = [i.text for i in product_pagn[1:-1]]
     product_brand = product_pagn[-1]
     product_brand_name = product_brand.text
     fk_out_json["product_brand_name"] = product_brand_name
     product_brand_href = product_brand.attrs["href"]
     fk_out_json["fk_assured"] = not isinstance(product_soup.find("img", {"class": "jMnjzX"}), type(None))
-    fk_out_json["description"] =  product_soup.find("div",{'class':'_1mXcCf RmoJUa'}).text
+    fk_descr =  product_soup.find("div",{'class':'_1mXcCf RmoJUa'})
+    fk_out_json["description"] =  fk_descr.text if fk_descr else ""
     fk_out_json["rating"] = product_soup.find("div",{"class":"_2d4LTz"}).text
     fk_out_json["no_of_ratings"] = product_soup.findAll("div",{"class":"row _2afbiS"})[0].text[:-10]
     fk_out_json["no_of_reviews"] = product_soup.findAll("div",{"class":"row _2afbiS"})[1].text[:-8]
@@ -241,7 +244,9 @@ def summary_fk_link(link_url):
     fk_out_json["final_price"] = product_soup.find("div", {"class": "_30jeq3 _16Jk6d"}).text
     fk_out_json["mrp"] = product_soup.find("div", {"class": "_3I9_wc _2p6lqe"}).text
     fk_out_json["discount"] = product_soup.find("div", {"class": "_3Ay6Sb _31Dcoz"}).text
-    fk_out_json["categories"] = {}
+    # fk_out_json["categories"] = {}
+    fk_out_json["category"] = cats[0]
+    fk_out_json["sub_category"] = cats[1]
     # print("h1")
     # print(fk_out_json)
     # print(product_pagn)
@@ -366,16 +371,3 @@ def scrape_fk_link(link_url, get_cat_comparison=True):
     # print("packer_details: ", packer_details)
 
     return fk_out_json
-
-# link_url1="https://www.flipkart.com/infinix-x1-slim-series-core-i3-10th-gen-8-gb-256-gb-ssd-windows-11-home-xl21-thin-light-laptop/p/itma1003dc991f9f?pid=COMGEHP5EFEGWZW5&lid=LSTCOMGEHP5EFEGWZW5AGHTBE&marketplace=FLIPKART&fm=personalisedRecommendation%2Fp2p-same&iid=R%3As%3Bp%3ACOMGG3S9XZV4PWHB%3Bpt%3Ahp%3Buid%3A38c7eb78-643a-11ed-9e9c-bf909c01bc4b%3B.COMGEHP5EFEGWZW5&ssid=o1o2uwp56107l4ao1668443675346&otracker=hp_reco_You%2BMay%2BLike..._3_8.productCard.PMU_V2_Infinix%2BX1%2BSlim%2BSeries%2BCore%2Bi3%2B10th%2BGen%2B-%2B%25288%2BGB%252F256%2BGB%2BSSD%252FWindows%2B11%2BHome%2529%2BXL21%2BThin%2Band%2BLight%2BLaptop_COMGEHP5EFEGWZW5_personalisedRecommendation%2Fp2p-same_2&otracker1=hp_reco_WHITELISTED_personalisedRecommendation%2Fp2p-same_You%2BMay%2BLike..._DESKTOP_HORIZONTAL_productCard_cc_3_NA_view-all&cid=COMGEHP5EFEGWZW5"
-# # scrape_fk_link(link_url1)
-# scrape_fk_link(link_url1, False)
-
-# seller_link="/sellers?pid=MOBG6VF5GXVFTQ5Y&otracker=hp_reco_More%252Bto%252BExplore_4_8.productCard.PMU_V2_APPLE%252BiPhone%252B13%252B%252528Pink%25252C%252B128%252BGB%252529_MOBG6VF5GXVFTQ5Y_personalisedRecommendation%252Fp2p-same_3&fetchId=4d44ac86-c3d3-48bd-acc7-a5943455ab78.MOBG6VF5GXVFTQ5Y"
-# seller_link="/sellers?pid=POSGDAQ2Z7XDNGHQ&otracker=search&fetchId=50114908-3307-412e-9d33-bad8a25eaa44.POSGDAQ2Z7XDNGHQ"
-# get_product_sellers(seller_link)
-
-# reviews_link="https://www.flipkart.com/nothing-phone-1-black-128-gb/product-reviews/itmeea53a564de47?pid=MOBGCYGPFEGDMYQR&lid=LSTMOBGCYGPFEGDMYQRIMJJ0P&marketplace=FLIPKART"
-# reviews_link = "https://www.flipkart.com/stockmarket-classic-chart-pattern-poster-trading-candlestick-patterns-traders-sharemarket-chart-paper-print/product-reviews/itmf7f3ed62da747?pid=POSGDAQ2Z7XDNGHQ&lid=LSTPOSGDAQ2Z7XDNGHQRRGEHL&marketplace=FLIPKART"
-# v=get_reviews_for_listing(reviews_link)
-# pprint(v)

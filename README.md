@@ -25,5 +25,5 @@ npm start
 ## Celery and queue
 ```
 redis-server # seperate tab
-celery -A backend worker
+celery -A backend.celery worker -l info
 ```

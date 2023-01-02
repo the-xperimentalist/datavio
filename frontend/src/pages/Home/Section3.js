@@ -21,6 +21,7 @@ function Section3 (props) {
             <span key="button">
               <Button
                 type="primary"
+                onClick={props.showModal}
               >
                 Try Product
               </Button>
