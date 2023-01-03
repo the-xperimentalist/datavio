@@ -32,6 +32,7 @@ function AnalyzeView (props) {
   const [summary, setSummary] = useState({})
   const [isModalOpen, setIsModalOpen] = useState(false)
   const intervalRef = useRef(null)
+  const isCalled = useRef(false)
   const [pollApi, setPollApi] = useState(false)
   
   useEffect(() => {
@@ -67,13 +68,13 @@ function AnalyzeView (props) {
     console.log(reviewsceleryTaskId)
     const [{data: reviewsData, data: sellerInfoData}] = await Promise.all([axios.get(`${API_URL}/celery-task/${reviewsceleryTaskId}`), axios.get(`${API_URL}/celery-task/${sellersInfoTaskId}`)])
     if(reviewsData.status === "SUCCESS" && sellerInfoData.status === "SUCCESS") {
-      getCompletedSiteDetails()
+      await getCompletedSiteDetails()
       setPollApi(false)
     }
   }
 
   const getCompletedSiteDetails = () => {
-    axios.get(`${API_URL}/site-analysis-results/${siteAnalysisId}`)
+    return axios.get(`${API_URL}/site-analysis-results/${siteAnalysisId}`)
       .then(({data}) => {
         console.log(data)
         setSellerInfoFetched(true)
@@ -82,7 +83,10 @@ function AnalyzeView (props) {
   }
 
   useEffect(() => {
-    requestSiteDetails()
+    if (!isCalled.current) {
+      requestSiteDetails()
+      isCalled.current = true
+    }
   }, [url])
 
   const showModal = () => {
