@@ -22,6 +22,7 @@ function AnalyzeView (props) {
   const [loading, setLoading] = useState(true)
   const [siteAnalysisId, setSiteAnalysisId] = useState(-1)
 
+  const [state,setState] = useState({})
   const [sellerInfo, setSellerInfo] = useState({})
   const [sellerInfoFetched, setSellerInfoFetched] = useState(false)
 
@@ -31,6 +32,22 @@ function AnalyzeView (props) {
   const [summary, setSummary] = useState({})
   const [isModalOpen, setIsModalOpen] = useState(false)
   const intervalRef = useRef(null)
+  const isCalled = useRef(false)
+  const [pollApi, setPollApi] = useState(false)
+  
+  useEffect(() => {
+    let intervalId = null;
+    if(pollApi) {
+      intervalId = setInterval(() => {
+        checkCompletedTaskStatus(state.sellers_info, state.reviews)
+      },5000) 
+    } else {
+      clearInterval(intervalId)
+    }
+    return () => {
+      clearInterval(intervalId)
+    }
+  },[pollApi])
 
   // summary with respect to manufacturer info is seperate
   const requestSiteDetails = () => {
@@ -38,34 +55,26 @@ function AnalyzeView (props) {
     axios.post(`${API_URL}/analyze-site`, postData)
       .then(({data}) => {
         setLoading(false)
-        console.log(data)
+        setState(data)
         setSiteAnalysisId(data.id)
         setSummary(data.summary)
-        intervalRef.current = setInterval(() => {
-          checkCompletedTaskStatus(data.sellers_info, data.reviews)
-        }, 5000)
+        setPollApi(true)
       })
   }
 
-  const checkCompletedTaskStatus = (sellersInfoTaskId, reviewsceleryTaskId) => {
+
+  const checkCompletedTaskStatus = async (sellersInfoTaskId, reviewsceleryTaskId) => {
     console.log(sellersInfoTaskId)
     console.log(reviewsceleryTaskId)
-    axios.get(`${API_URL}/celery-task/${reviewsceleryTaskId}`)
-      .then(({data}) => {
-        if (data.status === "SUCCESS") {
-          axios.get(`${API_URL}/celery-task/${sellersInfoTaskId}`)
-            .then(({data}) => {
-              if (data.status === "SUCCESS") {
-                getCompletedSiteDetails()
-                clearInterval(intervalRef.current)
-              }
-            })
-        }
-      })
+    const [{data: reviewsData, data: sellerInfoData}] = await Promise.all([axios.get(`${API_URL}/celery-task/${reviewsceleryTaskId}`), axios.get(`${API_URL}/celery-task/${sellersInfoTaskId}`)])
+    if(reviewsData.status === "SUCCESS" && sellerInfoData.status === "SUCCESS") {
+      await getCompletedSiteDetails()
+      setPollApi(false)
+    }
   }
 
   const getCompletedSiteDetails = () => {
-    axios.get(`${API_URL}/site-analysis-results/${siteAnalysisId}`)
+    return axios.get(`${API_URL}/site-analysis-results/${siteAnalysisId}`)
       .then(({data}) => {
         console.log(data)
         setSellerInfoFetched(true)
@@ -74,8 +83,10 @@ function AnalyzeView (props) {
   }
 
   useEffect(() => {
-    console.log("Here")
-    requestSiteDetails()
+    if (!isCalled.current) {
+      requestSiteDetails()
+      isCalled.current = true
+    }
   }, [url])
 
   const showModal = () => {
